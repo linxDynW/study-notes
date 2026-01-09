@@ -12,7 +12,8 @@ venv/
 .venv/
 
 # --- IDE & System ---
+.obsidian/
 .vscode/
 .idea/
-.DS_Store
+.DS_Stores
 Thumbs.db
