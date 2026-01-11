@@ -21,3 +21,5 @@ Thumbs.db
 *.json
 
 C_language
+
+.pdm-python

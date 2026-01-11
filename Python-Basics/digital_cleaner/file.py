@@ -5,4 +5,3 @@ class FileItem:
         self.ext = ext
         self.target_folder = target_folder
 
-        
