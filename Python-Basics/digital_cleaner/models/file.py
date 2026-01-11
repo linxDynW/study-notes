@@ -1,4 +1,3 @@
-import os
 class FileItem:
     def __init__(self, parent, basename, ext, target_folder):
         self.parent = parent
