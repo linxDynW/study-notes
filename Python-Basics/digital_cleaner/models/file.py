@@ -5,3 +5,5 @@ class FileItem:
         self.ext = ext
         self.target_folder = target_folder
 
+    def full_name(self):
+        return self.basename + self.ext

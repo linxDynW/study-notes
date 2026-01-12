@@ -2,8 +2,8 @@ import os
 import shutil
 from types import MappingProxyType
 
-from file import FileItem
-from history import HistoryManager
+from models.file import FileItem
+from utils.history import HistoryManager
 from loguru import logger
 from tqdm import tqdm
 
@@ -79,19 +79,21 @@ class FileClassifier:
                 continue
 
             name, ext = os.path.splitext(file_str)
-
-            for i in EXTENSION_MAP:
-                if ext.lower() in EXTENSION_MAP[i]:
-                    target_folder = i
+            
+            target_folder = "Other"
+            for category, extensions in EXTENSION_MAP.items():
+                if ext.lower() in extensions:
+                    target_folder = category
                     break
-            target_folder = target_folder if 'target_folder' in locals() else "Other"
+
             file_obj = FileItem(original_path, name, ext, target_folder)
             self.files.append(file_obj)
 
     def to_target_folder(self, base_dst_path):
         pbar = tqdm(self.files, desc="移动文件", unit="个")
+
         for file_obj in self.files:
-            pbar.set_postfix(file=(filename := file_obj.basename + file_obj.ext))
+            pbar.set_postfix(file=(filename := file_obj.full_name))
 
             original_full_path = os.path.join(file_obj.parent, filename)
 
@@ -101,6 +103,7 @@ class FileClassifier:
 
             if not os.path.exists(target_folder_path):
                 os.makedirs(target_folder_path)
+
             if os.path.exists(target_file_path):
                 logger.warning(f"跳过同名文件: {filename}")
             try:
@@ -114,6 +117,7 @@ class FileClassifier:
             except Exception as e:
                 logger.error(f"移动失败： {filename}: {e}")
             pbar.update(1)
+
         pbar.close()
         self.files = []
 
